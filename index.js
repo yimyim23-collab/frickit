@@ -1,4 +1,5 @@
 var form = document.getElementById('btn');
+var x = document.getElementById('title')
 form.addEventListener('click', function(e) {
     var options = {
         enableHighAccuracy: true,
@@ -13,10 +14,12 @@ form.addEventListener('click', function(e) {
         console.log(`Latitude : ${crd.latitude}`);
         console.log(`Longitude: ${crd.longitude}`);
         console.log(`More or less ${crd.accuracy} meters.`);
+        x.innerHTML = "Loading Game Please Wait...";
     }
     
     function error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`)
+        x.innerHTML = "Failed Please Try Again";
     }
     
     navigator.geolocation.getCurrentPosition(success, error, options);
